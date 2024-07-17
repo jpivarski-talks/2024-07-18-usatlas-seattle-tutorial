@@ -51,6 +51,10 @@ def collect_answers(port=8000):
     import IPython.display
 
     class AnswerHandler(http.server.BaseHTTPRequestHandler):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.number = 0
+
         def log_message(self, *args, **kwargs):
             return   # override to disable logging
 
@@ -73,9 +77,10 @@ def collect_answers(port=8000):
                 except Exception as err:
                     answer = f'<p style="font-family: monospace;">{data["Message"]}</p>'
 
+                self.number += 1
                 IPython.display.display(
                     IPython.display.HTML(
-                        f'<details><summary style="font-weight: bold;">Answer</summary>{answer}</details>'
+                        f'<details><summary style="font-weight: bold;">Answer {self.number}</summary>{answer}</details>'
                     )
                 )
 
